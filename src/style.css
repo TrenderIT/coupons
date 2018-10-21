@@ -1730,10 +1730,12 @@ textarea.form-control {
   overflow: scroll;
 }
 
-html, body {
+html {
+  -webkit-overflow-scrolling: touch;
+}
+body {
   overflow-x: hidden;
   height: 100%;
-  -webkit-overflow-scrolling: touch;
 }
 
 *,
