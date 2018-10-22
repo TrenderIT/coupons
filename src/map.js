@@ -40,6 +40,7 @@ ymaps.ready(function () {
     clusterIconContentLayout: ymaps.templateLayoutFactory.createClass(
       '<span style="color: #969696;">{{ properties.geoObjects.length }}</span>'
     ),
+    clusterBalloonLeftColumnWidth: 155,
     balloonContentLayoutHeight: 400,
     balloonContentLayoutWidth: 400
   },
