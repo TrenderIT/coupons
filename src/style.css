@@ -4787,11 +4787,6 @@ img.mfp-img {
   color: #323232;
 }
 
-.main-content__address-title {
-  max-height: 3rem;
-  overflow: hidden;
-}
-
 .main-content__address-btn {
   color: #fff;
   font-size: 14px;
