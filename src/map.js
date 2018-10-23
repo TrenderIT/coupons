@@ -167,6 +167,13 @@ ymaps.ready(function () {
         menuItem.click(function(e) {
             let objectId = e.target.parentNode.dataset.id;
             couponObjectManager.objects.balloon.open(objectId);
+            let elem = $('#couponMap');
+            if ((elem.offset().top < window.pageYOffset) || ((elem.offset().top + elem.innerHeight()) > (window.pageYOffset + document.documentElement.clientHeight) )) {
+              $('html, body').animate({  // Прокрутка до карты - карта внизу окна
+                scrollTop: elem.offset().top + elem.innerHeight() - document.documentElement.clientHeight
+              }, 500);
+            }
+            e.preventDefault();
         });
     });
     }
