@@ -158,20 +158,21 @@ ymaps.ready(function () {
     // создаем текстовое меню
     function createMenuCoupon(item) {
         const menuCoupon = $('#couponMenu');
-
         item.features.forEach(item => {
-            let menuItem = $(`<li><a class="menu__item" href="#" data-id="${item.id}">${item.properties.clusterCaption}</a></li>`);
-
+            haveCoords = (item.geometry.coordinates) && (item.geometry.coordinates.length == 2) && (item.geometry.coordinates[0]>0) && (item.geometry.coordinates[1]>0);
+            let menuItem = $(`<li><a class="menu__item" href="#" data-id="${item.id}" data-havecoords="${haveCoords}">${item.properties.clusterCaption}</a></li>`);
         menuItem.appendTo(menuCoupon);
 
         menuItem.click(function(e) {
-            let objectId = e.target.parentNode.dataset.id;
-            couponObjectManager.objects.balloon.open(objectId);
-            let elem = $('#couponMap');
-            if ((elem.offset().top < window.pageYOffset) || ((elem.offset().top + elem.innerHeight()) > (window.pageYOffset + document.documentElement.clientHeight) )) {
-              $('html, body').animate({  // Прокрутка до карты - карта внизу окна
-                scrollTop: elem.offset().top + elem.innerHeight() - document.documentElement.clientHeight
-              }, 500);
+            if (e.target.parentNode.dataset.havecoords === "true") {
+                let objectId = e.target.parentNode.dataset.id;
+                couponObjectManager.objects.balloon.open(objectId);
+                let elem = $('#couponMap');
+                if ((elem.offset().top < window.pageYOffset) || ((elem.offset().top + elem.innerHeight()) > (window.pageYOffset + document.documentElement.clientHeight) )) {
+                  $('html, body').animate({  // Прокрутка до карты - карта внизу окна
+                    scrollTop: elem.offset().top + elem.innerHeight() - document.documentElement.clientHeight
+                  }, 500);
+                }
             }
             e.preventDefault();
         });
@@ -181,26 +182,26 @@ ymaps.ready(function () {
 
     function createMenuPlace(item) {
         const menuPlace = $('#placeMenu');
-
         item.features.forEach(item => {
-            let menuItem = $(`<li><a class="menu__item" href="#" data-id="${item.id}">${item.properties.clusterCaption}</a></li>`);
+            haveCoords = (item.geometry.coordinates) && (item.geometry.coordinates.length == 2) && (item.geometry.coordinates[0]>0) && (item.geometry.coordinates[1]>0);
+            let menuItem = $(`<li><a class="menu__item" href="#" data-id="${item.id}" data-havecoords="${haveCoords}">${item.properties.clusterCaption}</a></li>`);
+            menuItem.appendTo(menuPlace);
 
-        menuItem.appendTo(menuPlace);
-
-        menuItem.click(function(e) {
-            let objectId = e.target.parentNode.dataset.id;
-            placeObjectManager.objects.balloon.open(objectId);
-            let elem = $('#placeMap');
-            if ((elem.offset().top < window.pageYOffset) || ((elem.offset().top + elem.innerHeight()) > (window.pageYOffset + document.documentElement.clientHeight) )) {
-              $('html, body').animate({  // Прокрутка до карты - карта внизу окна
-                scrollTop: elem.offset().top + elem.innerHeight() - document.documentElement.clientHeight
-              }, 500);
-            }
-            e.preventDefault();
+            menuItem.click(function(e) {
+                if (e.target.parentNode.dataset.havecoords === "true") {
+                    let objectId = e.target.parentNode.dataset.id;
+                    placeObjectManager.objects.balloon.open(objectId);
+                    let elem = $('#placeMap');
+                    if ((elem.offset().top < window.pageYOffset) || ((elem.offset().top + elem.innerHeight()) > (window.pageYOffset + document.documentElement.clientHeight) )) {
+                      $('html, body').animate({  // Прокрутка до карты - карта внизу окна
+                        scrollTop: elem.offset().top + elem.innerHeight() - document.documentElement.clientHeight
+                      }, 500);
+                    }
+                }
+                e.preventDefault();
+            });
         });
-    });
-    }
-
+    }  
 
     // Подготовка данных для передачу в карту
     function coverCouponData(data) {
