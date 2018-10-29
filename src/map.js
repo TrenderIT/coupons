@@ -155,7 +155,6 @@ ymaps.ready(function () {
   placeObjectManager.clusters.events.add(['mouseenter', 'mouseleave', 'click'], onClusterEvent);
 
 
-    // создаем текстовое меню
     function createMenuCoupon(item) {
         const menuCoupon = $('#couponMenu');
 
@@ -190,6 +189,13 @@ ymaps.ready(function () {
         menuItem.click(function(e) {
             let objectId = e.target.parentNode.dataset.id;
             placeObjectManager.objects.balloon.open(objectId);
+            let elem = $('#placeMap');
+            if ((elem.offset().top < window.pageYOffset) || ((elem.offset().top + elem.innerHeight()) > (window.pageYOffset + document.documentElement.clientHeight) )) {
+              $('html, body').animate({  // Прокрутка до карты - карта внизу окна
+                scrollTop: elem.offset().top + elem.innerHeight() - document.documentElement.clientHeight
+              }, 500);
+            }
+            e.preventDefault();
         });
     });
     }
