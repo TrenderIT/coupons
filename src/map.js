@@ -155,6 +155,7 @@ ymaps.ready(function () {
   placeObjectManager.clusters.events.add(['mouseenter', 'mouseleave', 'click'], onClusterEvent);
 
 
+    // создаем текстовое меню
     function createMenuCoupon(item) {
         const menuCoupon = $('#couponMenu');
 
