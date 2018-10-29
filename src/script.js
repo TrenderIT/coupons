@@ -116,9 +116,9 @@ $(document).ready(function() {
         const top = $(id).offset().top;
         addressTab.tab('show');
 
-        $('body,html').animate({
-            scrollTop: top
-        }, 50);
+        // $('body,html').animate({
+        //     scrollTop: top
+        // }, 50);
     });
 
     // reviewtab
