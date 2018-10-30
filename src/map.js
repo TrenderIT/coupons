@@ -8,8 +8,6 @@ ymaps.ready(function () {
   },
   couponMap = new ymaps.Map('couponMap', mapSetup),
   placeMap  = new ymaps.Map('placeMap', mapSetup);
-
-
   // задаем параметры контролов карты
   var zoomControl = new ymaps.control.ZoomControl({
     options: {
@@ -81,9 +79,9 @@ ymaps.ready(function () {
           '<span style="color: #ff1e1e; font-weight: bold;">{{ properties.geoObjects.length }}</span>'
         )
       };
+
   couponObjectManager.objects.options.set(pointSetup);
   placeObjectManager.objects.options.set(pointSetup);
-
 
   // навешиваем события на точки и кластеры
   function onObjectEvent(e) {
@@ -96,32 +94,30 @@ ymaps.ready(function () {
         'iconImageSize': [80, 80],
         'iconImageOffset': [-40, -40]
       });
-      // console.log(objectId);
     } else {
       couponObjectManager.objects.setObjectOptions(objectId, {
         'iconLayout': 'default#image',
         'iconImageHref': '../img/map__placemark.svg',
         'iconImageSize': [44, 44],
         'iconImageOffset': [-22, -22]
-      });
+        });
     }
   }
-  function onClusterEvent(e) {
-    var objectId = e.get('objectId');
+    function onClusterEvent(e) {
+        var objectId = e.get('objectId');
 
-    if (e.get('type') == 'mouseenter') {
-      couponObjectManager.clusters.setClusterOptions(objectId, clusterHoverSetup);
-      // console.log(objectId);
-    } else {
-      couponObjectManager.clusters.setClusterOptions(objectId, clusterSetup);
+        if (e.get('type') == 'mouseenter') {
+            couponObjectManager.clusters.setClusterOptions(objectId, clusterHoverSetup);
+        } else {
+            couponObjectManager.clusters.setClusterOptions(objectId, clusterSetup);
+        }
     }
-  }
   couponObjectManager.objects.events.add(['mouseenter', 'mouseleave', 'click'], onObjectEvent);
   couponObjectManager.clusters.events.add(['mouseenter', 'mouseleave', 'click'], onClusterEvent);
 
 
   // навешиваем события на точки и кластеры
-  function onObjectEvent(e) {
+  function onObjectEvent2(e) {
     var objectId = e.get('objectId');
 
     if (e.get('type') == 'mouseenter') {
@@ -131,28 +127,26 @@ ymaps.ready(function () {
         'iconImageSize': [80, 80],
         'iconImageOffset': [-40, -40]
       });
-      // console.log(objectId);
     } else {
       placeObjectManager.objects.setObjectOptions(objectId, {
         'iconLayout': 'default#image',
         'iconImageHref': '../img/map__placemark.svg',
         'iconImageSize': [44, 44],
         'iconImageOffset': [-22, -22]
-      });
+        });
     }
   }
-  function onClusterEvent(e) {
+  function onClusterEvent2(e) {
     var objectId = e.get('objectId');
 
     if (e.get('type') == 'mouseenter') {
       placeObjectManager.clusters.setClusterOptions(objectId, clusterHoverSetup);
-      // console.log(objectId);
     } else {
       placeObjectManager.clusters.setClusterOptions(objectId, clusterSetup);
     }
   }
-  placeObjectManager.objects.events.add(['mouseenter', 'mouseleave', 'click'], onObjectEvent);
-  placeObjectManager.clusters.events.add(['mouseenter', 'mouseleave', 'click'], onClusterEvent);
+  placeObjectManager.objects.events.add(['mouseenter', 'mouseleave', 'click'], onObjectEvent2);
+  placeObjectManager.clusters.events.add(['mouseenter', 'mouseleave', 'click'], onClusterEvent2);
 
 
     // создаем текстовое меню
@@ -201,13 +195,12 @@ ymaps.ready(function () {
                 e.preventDefault();
             });
         });
-    }  
+    }
+
 
     // Подготовка данных для передачу в карту
     function coverCouponData(data) {
-
         data.features.forEach(item => {
-
             let saleContent,
                 priceContent,
                 timeContent,
@@ -229,48 +222,48 @@ ymaps.ready(function () {
 
             if ( dataFeatures.time && dataFeatures.time !== undefined ) {
                 timeContent = `
-          <div class='main-content__address-meta'>
-            <svg class='main-content__address-meta-icon' width='14' height='14'><use xlink:href='/img/sprite-svg.svg#coupon__address-clock-icon'></use></svg>
-            <span class='main-content__address-meta-desc'>${dataFeatures.time}</span>
-          </div>`;
+                  <div class='main-content__address-meta'>
+                    <svg class='main-content__address-meta-icon' width='14' height='14'><use xlink:href='/img/sprite-svg.svg#coupon__address-clock-icon'></use></svg>
+                    <span class='main-content__address-meta-desc'>${dataFeatures.time}</span>
+                  </div>`;
             } else {
                 timeContent = '';
             }
 
             if ( dataFeatures.phone && dataFeatures.phone !== undefined ) {
                 phoneContent = `
-          <div class='main-content__address-meta'>
-            <svg class='main-content__address-meta-icon' width='14' height='14'><use xlink:href='/img/sprite-svg.svg#coupon__address-phone-icon'></use></svg>
-            <span class='main-content__address-meta-desc'>${dataFeatures.phone}</span>
-          </div>`;
+                  <div class='main-content__address-meta'>
+                    <svg class='main-content__address-meta-icon' width='14' height='14'><use xlink:href='/img/sprite-svg.svg#coupon__address-phone-icon'></use></svg>
+                    <span class='main-content__address-meta-desc'>${dataFeatures.phone}</span>
+                  </div>`;
             } else {
                 phoneContent = '';
             }
 
             if ( dataFeatures.address && dataFeatures.address !== undefined ) {
                 addressContent = `
-          <div class='main-content__address-meta'>
-            <svg class='main-content__address-meta-icon' width='13' height='18'><use xlink:href='/img/sprite-svg.svg#coupon__address-map-icon'></use></svg>
-            <span class='main-content__address-meta-desc'>${dataFeatures.address}</span>
-          </div>`;
+                  <div class='main-content__address-meta'>
+                    <svg class='main-content__address-meta-icon' width='13' height='18'><use xlink:href='/img/sprite-svg.svg#coupon__address-map-icon'></use></svg>
+                    <span class='main-content__address-meta-desc'>${dataFeatures.address}</span>
+                  </div>`;
             } else {
                 addressContent = '';
             }
 
             item.properties.balloonContentBody = `
-        <div class='main-content__address-block'>
-          <div class='main-content__address-img-wrap'>
-            <img class='main-content__address-img' src='${dataFeatures.imgUrl}' alt='img' width='212' height='88' />
-          </div>
-          ${saleContent}
-          ${priceContent}
-          <h2 class='main-content__address-title'>${dataFeatures.title}</h2>
-          <a class='btn main-content__address-btn' target='_blank' href='${dataFeatures.object_url}'>${coupon_button_balloon_title}</a>
-          <a href='${dataFeatures.place_url}' class='main-content__address-title'>${dataFeatures.category}</a>
-          ${timeContent}
-          ${phoneContent}
-          ${addressContent}
-        </div>`;
+              <div class='main-content__address-block'>
+                <div class='main-content__address-img-wrap'>
+                  <img class='main-content__address-img' src='${dataFeatures.imgUrl}' alt='img' width='212' height='88' />
+                </div>
+                ${saleContent}
+                ${priceContent}
+                <h2 class='main-content__address-title'>${dataFeatures.title}</h2>
+                <a class='btn main-content__address-btn' target='_blank' href='${dataFeatures.object_url}'>${coupon_button_balloon_title}</a>
+                <a href='${dataFeatures.place_url}' class='main-content__address-title'>${dataFeatures.category}</a>
+                ${timeContent}
+                ${phoneContent}
+                ${addressContent}
+              </div>`;
 
             item.properties.clusterCaption = `<span class='main-content__address-item'>${item.properties.clusterCaption}</span>`;
         });
@@ -280,7 +273,6 @@ ymaps.ready(function () {
 
 
     function coverPlaceData(data) {
-
         data.features.forEach(item => {
             let timeContent,
                 phoneContent,
@@ -289,46 +281,47 @@ ymaps.ready(function () {
 
             if ( dataFeatures.time ) {
                 timeContent = `
-          <div class='main-content__address-meta'>
-            <svg class='main-content__address-meta-icon' width='14' height='14'><use xlink:href='/img/sprite-svg.svg#coupon__address-clock-icon'></use></svg>
-            <span class='main-content__address-meta-desc'>${dataFeatures.time}</span>
-          </div>`;
+                  <div class='main-content__address-meta'>
+                    <svg class='main-content__address-meta-icon' width='14' height='14'><use xlink:href='/img/sprite-svg.svg#coupon__address-clock-icon'></use></svg>
+                    <span class='main-content__address-meta-desc'>${dataFeatures.time}</span>
+                  </div>`;
             } else {
                 timeContent = '';
             }
 
             if ( dataFeatures.phone ) {
                 phoneContent = `
-          <div class='main-content__address-meta'>
-            <svg class='main-content__address-meta-icon' width='14' height='14'><use xlink:href='/img/sprite-svg.svg#coupon__address-phone-icon'></use></svg>
-            <span class='main-content__address-meta-desc'>${dataFeatures.phone}</span>
-          </div>`;
+                  <div class='main-content__address-meta'>
+                    <svg class='main-content__address-meta-icon' width='14' height='14'><use xlink:href='/img/sprite-svg.svg#coupon__address-phone-icon'></use></svg>
+                    <span class='main-content__address-meta-desc'>${dataFeatures.phone}</span>
+                  </div>`;
             } else {
                 phoneContent = '';
             }
 
             if ( dataFeatures.address ) {
                 addressContent = `
-          <div class='main-content__address-meta'>
-            <svg class='main-content__address-meta-icon' width='13' height='18'><use xlink:href='/img/sprite-svg.svg#coupon__address-map-icon'></use></svg>
-            <span class='main-content__address-meta-desc'>${dataFeatures.address}</span>
-          </div>`;
+                  <div class='main-content__address-meta'>
+                    <svg class='main-content__address-meta-icon' width='13' height='18'><use xlink:href='/img/sprite-svg.svg#coupon__address-map-icon'></use></svg>
+                    <span class='main-content__address-meta-desc'>${dataFeatures.address}</span>
+                  </div>`;
             } else {
                 addressContent = '';
             }
 
             item.properties.balloonContentBody = `
-        <div class='main-content__address-block'>
-          <div class='main-content__address-img-wrap'>
-            <img class='main-content__address-img' src='${dataFeatures.imgUrl}' alt='img' width='212' height='88' />
-          </div>
-          <h2 class='main-content__address-title'>${dataFeatures.title}</h2>
-          <a class='btn main-content__address-btn' href='${dataFeatures.object_url}'>Подробнее о месте</a>
-          ${timeContent}
-          ${phoneContent}
-          ${addressContent}
-        </div>`;
+              <div class='main-content__address-block'>
+                <div class='main-content__address-img-wrap'>
+                  <img class='main-content__address-img' src='${dataFeatures.imgUrl}' alt='img' width='212' height='88' />
+                </div>
+                <h2 class='main-content__address-title'>${dataFeatures.title}</h2>
+                <a class='btn main-content__address-btn' href='${dataFeatures.object_url}'>Подробнее о месте</a>
+                ${timeContent}
+                ${phoneContent}
+                ${addressContent}
+              </div>`;
 
+            item.clust = "test";
             item.properties.clusterCaption = `<span class='main-content__address-item'>${item.properties.clusterCaption}</span>`;
         });
 
@@ -337,7 +330,7 @@ ymaps.ready(function () {
 
     // Создание и заполнение селекта купона
     function selectBlockCoupon(data) {
-        let selectBlock = $('#couponSelectBlock');
+        let selectBlock = $('#selectBlock');
         let options = '';
         let selectBlockCouponContent = '';
         let dataFeatures = data.features[0].properties.data;
@@ -348,14 +341,13 @@ ymaps.ready(function () {
         data.features.forEach(item => {
             options += `<option value="${item.id}">${item.properties.clusterCaption}</option>`
         });
-
         // time
         if (dataFeatures.time) {
             timeContent = `
-        <div class='main-content__address-meta'>
-          <svg class='main-content__address-meta-icon' width='14' height='14'><use xlink:href='/img/sprite-svg.svg#coupon__address-clock-icon'></use></svg>
-          <span class='main-content__address-meta-desc'>${dataFeatures.time}</span>
-        </div>`;
+              <div class='main-content__address-meta'>
+                <svg class='main-content__address-meta-icon' width='14' height='14'><use xlink:href='/img/sprite-svg.svg#coupon__address-clock-icon'></use></svg>
+                <span class='main-content__address-meta-desc'>${dataFeatures.time}</span>
+              </div>`;
         } else {
             timeContent = '';
         }
@@ -363,10 +355,10 @@ ymaps.ready(function () {
         // phone
         if (dataFeatures.phone) {
             phoneContent = `
-        <div class='main-content__address-meta'>
-          <svg class='main-content__address-meta-icon' width='14' height='14'><use xlink:href='/img/sprite-svg.svg#coupon__address-phone-icon'></use></svg>
-          <span class='main-content__address-meta-desc'>${dataFeatures.phone}</span>
-        </div>`;
+              <div class='main-content__address-meta'>
+                <svg class='main-content__address-meta-icon' width='14' height='14'><use xlink:href='/img/sprite-svg.svg#coupon__address-phone-icon'></use></svg>
+                <span class='main-content__address-meta-desc'>${dataFeatures.phone}</span>
+              </div>`;
         } else {
             phoneContent = '';
         }
@@ -374,53 +366,93 @@ ymaps.ready(function () {
         // address
         if (dataFeatures.address) {
             addressContent = `
-        <div class='main-content__address-meta'>
-          <svg class='main-content__address-meta-icon' width='13' height='18'><use xlink:href='/img/sprite-svg.svg#coupon__address-map-icon'></use></svg>
-          <span class='main-content__address-meta-desc'>${dataFeatures.address}</span>
-        </div>`;
+              <div class='main-content__address-meta'>
+                <svg class='main-content__address-meta-icon' width='13' height='18'><use xlink:href='/img/sprite-svg.svg#coupon__address-map-icon'></use></svg>
+                <span class='main-content__address-meta-desc'>${dataFeatures.address}</span>
+              </div>`;
         } else {
             addressContent = '';
         }
 
-        selectBlockCouponContent = `<span class='main-content__address-item'>Купоны <span>${data.features.length}</span></span>
+        var display = "";
+        if (typeof show_select_block === 'undefined') {
+            display = "style = 'display: none'";
+        }
 
-    <div class='main-content__input-group'>
-      <label class='main-content__label' for='point'></label>
-      <select class='main-content__select custom-select js-coupon-select' id='point' name='point'>
-        ${options}
-      </select>
-    </div>
+        selectBlockCouponContent = `<span class='main-content__address-item' ${display}>Адреса</span>
+            <div class='js-coupon-select-content' ${display}>
+                <div class='main-content__input-group' ${display}>
+                  <label class='main-content__label' for='point'></label>
+                  <select class='main-content__select custom-select js-coupon-select_sel' id='point' name='point'>
+                    ${options}
+                  </select>
+                </div>
 
-    <h2 class='main-content__address-title'>${dataFeatures.title}</h2>
-    <div class="main-content__sale-info">
-      <span class='main-content__price'>от <span>${dataFeatures.price}</span> руб.</span>
-      <span class='main-content__sale'>до ${dataFeatures.sale}%</span>
-    </div>
+                <h2 class='main-content__address-title'>${dataFeatures.title}</h2>
+                <div class="main-content__sale-info">
+                  <span class='main-content__price'>от <span>${dataFeatures.price}</span> руб.</span>
+                  <span class='main-content__sale'>до ${dataFeatures.sale}%</span>
+                </div>
 
-    <a class='btn main-content__address-btn' href='${dataFeatures.object_url}'>Подробнее о купоне</a>
-    <a href='#' class='main-content__address-title'>${dataFeatures.category}</a>
-    ${timeContent}
-    ${phoneContent}
-    ${addressContent}`;
+                <a class='btn main-content__address-btn' href='${dataFeatures.object_url}'>Подробнее о купоне</a>
+                <a href='#' class='main-content__address-title'>${dataFeatures.category}</a>
+                <div class='js-time'>${timeContent}</div>
+                <div class='js-phone'>${phoneContent}</div>
+                <div class='js-address'>${addressContent}</div>
+            </div>`;
 
         $(selectBlockCouponContent).appendTo(selectBlock);
 
 
         // Заполняем блок по изменению селекта
-        $(".js-coupon-select").change(function() {
-            const objectId = Number($(".js-coupon-select").val())
+        $(".js-coupon-select_sel").change(function() {
+            const objectId = Number($(".js-coupon-select_sel").val())
 
             data.features.forEach(item => {
-
                 if ( item.id === objectId ) {
+
                     // Заполняем блок селекта
                     $("#selectBlock .main-content__sale span").html(item.properties.data.sale);
                     $("#selectBlock .main-content__price span").html(item.properties.data.price);
                     $("#selectBlock h2.main-content__address-title").html(item.properties.data.title);
+                    $("#selectBlock a.main-content__address-btn").attr('href',item.properties.data.object_url);
                     $("#selectBlock a.main-content__address-title").html(item.properties.data.category);
-                    $("#selectBlock .js-time").html(item.properties.data.time);
-                    $("#selectBlock .js-phone").html(item.properties.data.phone);
-                    $("#selectBlock .js-address").html(item.properties.data.address);
+
+                    if (item.properties.data.time) {
+                        timeContent = `
+                          <div class='main-content__address-meta'>
+                            <svg class='main-content__address-meta-icon' width='14' height='14'><use xlink:href='/img/sprite-svg.svg#coupon__address-clock-icon'></use></svg>
+                            <span class='main-content__address-meta-desc'>${item.properties.data.time}</span>
+                          </div>`;
+                    } else {
+                        timeContent = '';
+                    }
+
+                    $("#selectBlock .js-time").html(timeContent);
+
+                    if (item.properties.data.phone) {
+                        phoneContent = `
+                          <div class='main-content__address-meta'>
+                            <svg class='main-content__address-meta-icon' width='14' height='14'><use xlink:href='/img/sprite-svg.svg#coupon__address-phone-icon'></use></svg>
+                            <span class='main-content__address-meta-desc'>${item.properties.data.phone}</span>
+                          </div>`;
+                    } else {
+                        phoneContent = '';
+                    }
+
+                    $("#selectBlock .js-phone").html(phoneContent);
+
+                    if (item.properties.data.address) {
+                        addressContent = `
+                          <div class='main-content__address-meta'>
+                            <svg class='main-content__address-meta-icon' width='13' height='18'><use xlink:href='/img/sprite-svg.svg#coupon__address-map-icon'></use></svg>
+                            <span class='main-content__address-meta-desc'>${item.properties.data.address}</span>
+                          </div>`;
+                    } else {
+                        addressContent = '';
+                    }
+
+                    $("#selectBlock .js-address").html(addressContent);
 
                     // центруем карту
                     couponMap.setCenter(item.geometry.coordinates, 12, {
@@ -451,10 +483,10 @@ ymaps.ready(function () {
         // time
         if ( dataFeatures.time ) {
             timeContent = `
-        <div class='main-content__address-meta'>
-          <svg class='main-content__address-meta-icon' width='14' height='14'><use xlink:href='/img/sprite-svg.svg#coupon__address-clock-icon'></use></svg>
-          <span class='main-content__address-meta-desc'>${dataFeatures.time}</span>
-        </div>`;
+                <div class='main-content__address-meta'>
+                  <svg class='main-content__address-meta-icon' width='14' height='14'><use xlink:href='/img/sprite-svg.svg#coupon__address-clock-icon'></use></svg>
+                  <span class='main-content__address-meta-desc js-time'>${dataFeatures.time}</span>
+                </div>`;
         } else {
             timeContent = '';
         }
@@ -462,10 +494,10 @@ ymaps.ready(function () {
         // phone
         if ( dataFeatures.phone ) {
             phoneContent = `
-        <div class='main-content__address-meta'>
-          <svg class='main-content__address-meta-icon' width='14' height='14'><use xlink:href='/img/sprite-svg.svg#coupon__address-phone-icon'></use></svg>
-          <span class='main-content__address-meta-desc'>${dataFeatures.phone}</span>
-        </div>`;
+                <div class='main-content__address-meta'>
+                  <svg class='main-content__address-meta-icon' width='14' height='14'><use xlink:href='/img/sprite-svg.svg#coupon__address-phone-icon'></use></svg>
+                  <span class='main-content__address-meta-desc js-phone'>${dataFeatures.phone}</span>
+                </div>`;
         } else {
             phoneContent = '';
         }
@@ -473,43 +505,50 @@ ymaps.ready(function () {
         // address
         if ( dataFeatures.address ) {
             addressContent = `
-        <div class='main-content__address-meta'>
-          <svg class='main-content__address-meta-icon' width='13' height='18'><use xlink:href='/img/sprite-svg.svg#coupon__address-map-icon'></use></svg>
-          <span class='main-content__address-meta-desc'>${dataFeatures.address}</span>
-        </div>`;
+                <div class='main-content__address-meta'>
+                  <svg class='main-content__address-meta-icon' width='13' height='18'><use xlink:href='/img/sprite-svg.svg#coupon__address-map-icon'></use></svg>
+                  <span class='main-content__address-meta-desc js-address'>${dataFeatures.address}</span>
+                </div>`;
         } else {
             addressContent = '';
         }
 
-        selectBlockPlaceContent = `<span class='main-content__address-item'>Купоны <span>${data.features.length}</span></span>
+        var display = "";
+        if (typeof show_select_block === 'undefined') {
+            display = "style = 'display: none'";
+        }
 
-    <div class='main-content__input-group'>
-      <label class='main-content__label' for='point'></label>
-      <select class='main-content__select custom-select js-place-select' id='point' name='point'>
-        ${options}
-      </select>
-    </div>
+        selectBlockPlaceContent = `<span class='main-content__address-item' ${display}>Адреса</span>
+            <div class='js-place-select-content' ${display}>
+                <div class='main-content__input-group' ${display}>>
+                  <label class='main-content__label' for='point'></label>
+                  <select class='main-content__select custom-select js-place-select' id='point' name='point'>
+                    ${options}
+                  </select>
+                </div>
 
-    <h2 class='main-content__address-title'>${dataFeatures.title}</h2>
+                <h2 class='main-content__address-title'>${dataFeatures.title}</h2>
 
-    <a class='btn main-content__address-btn' href='${dataFeatures.object_url}'>Подробнее о месте</a>
-    ${timeContent}
-    ${phoneContent}
-    ${addressContent}`;
+                <a class='btn main-content__address-btn' href='${dataFeatures.object_url}'>Подробнее о месте</a>
+                ${timeContent}
+                ${phoneContent}
+                ${addressContent}
+            </div>`;
 
         $(selectBlockPlaceContent).appendTo(selectBlock);
 
         // Заполняем блок по изменению селекта
         $('.js-place-select').change(function() {
+
             const objectId = Number($('.js-place-select').val())
 
             data.features.forEach(item => {
 
                 if ( item.id === objectId ) {
-                    $("#selectBlock h2.main-content__address-title").html(item.properties.data.title);
-                    $("#selectBlock .js-time").html(item.properties.data.time);
-                    $("#selectBlock .js-phone").html(item.properties.data.phone);
-                    $("#selectBlock .js-address").html(item.properties.data.address);
+                    $("#placeSelectBlock h2.main-content__address-title").html(item.properties.data.title);
+                    $("#placeSelectBlock .js-time").html(item.properties.data.time);
+                    $("#placeSelectBlock .js-phone").html(item.properties.data.phone);
+                    $("#placeSelectBlock .js-address").html(item.properties.data.address);
 
                     // центруем карту
                     placeMap.setCenter(item.geometry.coordinates, 12, {
@@ -529,9 +568,12 @@ ymaps.ready(function () {
           // url: "js/coupon.json"
       }).done(function(data) {
         var couponGroups = coverCouponData(data);
-          couponObjectManager.add(couponGroups);
-          createMenuCoupon(couponGroups);
-          selectBlockCoupon(data);
+        couponObjectManager.add(couponGroups);
+        createMenuCoupon(couponGroups);
+        selectBlockCoupon(data);
+        // if (typeof show_select_block !== 'undefined') {
+        //     selectBlockCoupon(data);
+        // }
       });
       couponMap.geoObjects.add(couponObjectManager);
   }
@@ -548,6 +590,9 @@ ymaps.ready(function () {
           placeObjectManager.add(placeGroups);
           createMenuPlace(placeGroups);
           selectBlockPlace(data);
+          // if (typeof show_select_block !== 'undefined') {
+          //     selectBlockPlace(data);
+          // }
       });
       placeMap.geoObjects.add(placeObjectManager);
   }
@@ -561,35 +606,82 @@ ymaps.ready(function () {
       } else {
           var place_points_url = '/places/get-all-points';
       }
-        //console.info(place_points_url);
-        $.ajax({
-            url: place_points_url
-        }).done(function(data) {
-            //console.info(data);
-            var placeGroups = coverPlaceData(data);
-            placeObjectManager.add(placeGroups);
-            createMenuPlace(placeGroups);
-            selectBlockPlace(data);
-        });
-        placeMap.geoObjects.add(placeObjectManager);
+      $.ajax({
+          url: place_points_url
+      }).done(function(data) {
+          var placeGroups = coverPlaceData(data);
+          placeObjectManager.add(placeGroups);
+          createMenuPlace(placeGroups);
+          //selectBlockPlace(data);
+      });
+      placeMap.geoObjects.add(placeObjectManager);
     });
 
-  if (doc_w <= 576) {
-    placeObjectManager.options.set('geoObjectOpenBalloonOnClick', false);
-    couponObjectManager.options.set('geoObjectOpenBalloonOnClick', false);
-  } else {
-    placeObjectManager.options.set('geoObjectOpenBalloonOnClick', true);
-    couponObjectManager.options.set('geoObjectOpenBalloonOnClick', true);
-  }
-  // запрет на открытие балунов
-  var doc_w = $(window).width();
-  $(window).bind('resize', function() {
-    if (doc_w <= 576) {
-      placeObjectManager.options.set('geoObjectOpenBalloonOnClick', false);
-      couponObjectManager.options.set('geoObjectOpenBalloonOnClick', false);
-    } else {
-      placeObjectManager.options.set('geoObjectOpenBalloonOnClick', true);
-      couponObjectManager.options.set('geoObjectOpenBalloonOnClick', true);
+    function clickPointEx(e, maptype) {
+        if ((maptype != 1) && (maptype != 2)) { return;}
+
+        var elem = e.get('target');
+        var objectId = e.get('objectId');
+
+        switch (maptype) {
+            case 1:
+                $('.js-coupon-select-content').show();
+                $('.js-coupon-select_sel').val(objectId).change();
+                break;
+            case 2:
+                $('.js-place-select-content').show();
+                $('.js-place-select').val(objectId).change();
+                break;
+            default: ;
+        }
     }
-  });
+    function clickPointEx1 (e) { clickPointEx(e, 1); }
+    function clickPointEx2 (e) { clickPointEx(e, 2); }
+    function clickClusterEx(e) {
+        return;
+        console.log('cluster click', e);
+        if (e.get('type') == 'click') {
+            if (couponMap.getZoom() >= Math.max.apply(null,couponMap.zoomRange.getCurrent())) {
+                var objectId = e.get('objectId');
+                console.log(objectId);
+
+                var elem = e.get('target');
+console.log(typeof elem.getGeoObjects);
+                console.log(couponMap.objects.getGeoObjects(objectId));
+
+                if (elem.getGeoObjects()) {
+                    var points = elem.getGeoObjects();
+                    points.forEach(element => {console.log(element);})
+                }
+                console.log('content', elem.content);
+                //console.log('cluster objects',elem.properties.get('geoObjects'));
+            }
+        }
+    }
+
+    // запрет на открытие балунов
+    $(window).bind('resize', function() {
+        if ($(window).width() <= 576) {
+            placeObjectManager.options.set('geoObjectOpenBalloonOnClick', false);
+            couponObjectManager.options.set('geoObjectOpenBalloonOnClick', false);
+            placeObjectManager.options.set('clusterOpenBalloonOnClick', false);
+            couponObjectManager.options.set('clusterOpenBalloonOnClick', false);
+
+            couponObjectManager.objects.events.add('click', clickPointEx1);
+            placeObjectManager.objects.events.add('click', clickPointEx2);
+            couponObjectManager.clusters.events.add('click', clickClusterEx);
+            placeObjectManager.clusters.events.add('click', clickClusterEx);
+        } else {
+            placeObjectManager.options.set('geoObjectOpenBalloonOnClick', true);
+            couponObjectManager.options.set('geoObjectOpenBalloonOnClick', true);
+            placeObjectManager.options.set('clusterOpenBalloonOnClick', true);
+            couponObjectManager.options.set('clusterOpenBalloonOnClick', true);
+
+            couponObjectManager.objects.events.remove('click', clickPointEx1);
+            placeObjectManager.objects.events.remove('click', clickPointEx2);
+            couponObjectManager.clusters.events.remove('click', clickClusterEx);
+            placeObjectManager.clusters.events.remove('click', clickClusterEx);
+        }
+    });
+    $(window).trigger('resize');
 });

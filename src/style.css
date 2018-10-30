@@ -6436,7 +6436,7 @@ img.mfp-img {
   background-color: #ffffff;
   -webkit-box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
           box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
-  margin-bottom: -50px;
+  margin-bottom: 4px;
   width: 100%;
   overflow: hidden;
 }
