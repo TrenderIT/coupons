@@ -205,6 +205,7 @@ ymaps.ready(function () {
                 priceContent,
                 timeContent,
                 phoneContent,
+                title,
                 addressContent = '';
             let dataFeatures = item.properties.data;
 
@@ -218,6 +219,12 @@ ymaps.ready(function () {
                 priceContent = `<span class='main-content__price'>от <span>${dataFeatures.price} руб.</span></span>`;
             } else {
                 priceContent = '';
+            }
+
+            if (dataFeatures.title.length > 56) {
+                title = dataFeatures.title.slice(0,56) + "...";
+            } else {
+                title = dataFeatures.title;
             }
 
             if ( dataFeatures.time && dataFeatures.time !== undefined ) {
@@ -257,7 +264,7 @@ ymaps.ready(function () {
                 </div>
                 ${saleContent}
                 ${priceContent}
-                <h2 class='main-content__address-title'>${dataFeatures.title}</h2>
+                <h2 class='main-content__address-title'>${title}</h2>
                 <a class='btn main-content__address-btn' target='_blank' href='${dataFeatures.object_url}'>${coupon_button_balloon_title}</a>
                 <a href='${dataFeatures.place_url}' class='main-content__address-title'>${dataFeatures.category}</a>
                 ${timeContent}
@@ -276,8 +283,15 @@ ymaps.ready(function () {
         data.features.forEach(item => {
             let timeContent,
                 phoneContent,
+                title,
                 addressContent = '';
             let dataFeatures = item.properties.data;
+
+            if (dataFeatures.title.length > 56) {
+                title = dataFeatures.title.slice(0,56) + "...";
+            } else {
+                title = dataFeatures.title;
+            }
 
             if ( dataFeatures.time ) {
                 timeContent = `
@@ -314,7 +328,7 @@ ymaps.ready(function () {
                 <div class='main-content__address-img-wrap'>
                   <img class='main-content__address-img' src='${dataFeatures.imgUrl}' alt='img' width='212' height='88' />
                 </div>
-                <h2 class='main-content__address-title'>${dataFeatures.title}</h2>
+                <h2 class='main-content__address-title'>${title}</h2>
                 <a class='btn main-content__address-btn' href='${dataFeatures.object_url}'>Подробнее о месте</a>
                 ${timeContent}
                 ${phoneContent}
@@ -639,21 +653,21 @@ ymaps.ready(function () {
     function clickPointEx2 (e) { clickPointEx(e, 2); }
     function clickClusterEx(e) {
         return;
-        console.log('cluster click', e);
+//console.log('cluster click', e);
         if (e.get('type') == 'click') {
             if (couponMap.getZoom() >= Math.max.apply(null,couponMap.zoomRange.getCurrent())) {
                 var objectId = e.get('objectId');
                 console.log(objectId);
 
                 var elem = e.get('target');
-console.log(typeof elem.getGeoObjects);
-                console.log(couponMap.objects.getGeoObjects(objectId));
+//console.log(typeof elem.getGeoObjects);
+//console.log(couponMap.objects.getGeoObjects(objectId));
 
                 if (elem.getGeoObjects()) {
                     var points = elem.getGeoObjects();
                     points.forEach(element => {console.log(element);})
                 }
-                console.log('content', elem.content);
+//console.log('content', elem.content);
                 //console.log('cluster objects',elem.properties.get('geoObjects'));
             }
         }

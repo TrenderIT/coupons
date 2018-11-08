@@ -4746,6 +4746,7 @@ img.mfp-img {
   font-size: 14px;
   color: #787878;
   font-weight: bold;
+  overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
   display: block;
