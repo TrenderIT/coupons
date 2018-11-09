@@ -344,7 +344,7 @@ ymaps.ready(function () {
 
     // Создание и заполнение селекта купона
     function selectBlockCoupon(data) {
-        let selectBlock = $('#selectBlock');
+        let selectBlock = $('#couponSelectBlock');
         let options = '';
         let selectBlockCouponContent = '';
         let dataFeatures = data.features[0].properties.data;
