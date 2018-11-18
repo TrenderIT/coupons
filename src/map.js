@@ -1,5 +1,7 @@
 ymaps.ready(function () {
 
+    defaultMapZoomOnSelectorChange = 12;
+    currentMapZoomOnSelectorChange = defaultMapZoomOnSelectorChange;
   // инициализируем экземпляры карт
   var mapSetup = {
     center: city_coordinates,
@@ -471,9 +473,10 @@ ymaps.ready(function () {
                     $("#couponSelectBlock .js-address").html(addressContent);
 
                     // центруем карту
-                    couponMap.setCenter(item.geometry.coordinates, 12, {
+                    couponMap.setCenter(item.geometry.coordinates, currentMapZoomOnSelectorChange, {
                         checkZoomRange: true
                     });
+                    currentMapZoomOnSelectorChange = defaultMapZoomOnSelectorChange;
                 }
 
             });
@@ -569,9 +572,10 @@ ymaps.ready(function () {
                     $("#placeSelectBlock .js-address").html(item.properties.data.address);
 
                     // центруем карту
-                    placeMap.setCenter(item.geometry.coordinates, 12, {
+                    placeMap.setCenter(item.geometry.coordinates, currentMapZoomOnSelectorChange, {
                         checkZoomRange: true
                     });
+                    currentMapZoomOnSelectorChange = defaultMapZoomOnSelectorChange;
                 }
 
             });
@@ -589,9 +593,6 @@ ymaps.ready(function () {
         couponObjectManager.add(couponGroups);
         createMenuCoupon(couponGroups);
         selectBlockCoupon(data);
-        // if (typeof show_select_block !== 'undefined') {
-        //     selectBlockCoupon(data);
-        // }
       });
       couponMap.geoObjects.add(couponObjectManager);
   }
@@ -608,9 +609,6 @@ ymaps.ready(function () {
           placeObjectManager.add(placeGroups);
           createMenuPlace(placeGroups);
           selectBlockPlace(data);
-          // if (typeof show_select_block !== 'undefined') {
-          //     selectBlockPlace(data);
-          // }
       });
       placeMap.geoObjects.add(placeObjectManager);
   }
@@ -655,30 +653,33 @@ ymaps.ready(function () {
     }
     function clickPointEx1 (e) { clickPointEx(e, 1); }
     function clickPointEx2 (e) { clickPointEx(e, 2); }
-    function clickClusterEx(e) {
-        return;
-//console.log('cluster click', e);
+    function clickClusterEx(e, maptype) {
         if (e.get('type') == 'click') {
-            if (couponMap.getZoom() >= Math.max.apply(null,couponMap.zoomRange.getCurrent())) {
+            switch (maptype) {
+                case 1:
+                    vmap = couponMap;
+                    selectContent = '.js-coupon-select-content';
+                    selectType = '.js-coupon-select_sel';
+                    break;
+                case 2:
+                    vmap = placeMap;
+                    selectContent = '.js-place-select-content';
+                    selectType = '.js-place-select';
+                    break;
+                default:
+                    exit;
+            }
+            if (vmap.getZoom() >= Math.max.apply(null,vmap.zoomRange.getCurrent())) {
                 var objectId = e.get('objectId');
-console.log(objectId);
-console.log(couponMap);
-console.log(placeMap);
-
-                var elem = e.get('target');
-                objectsss = couponMap.geoObjects.get(objectId);
-console.log(objectsss);
-//console.log(couponMap.objects.getGeoObjects(objectId));
-
-                if (elem.getGeoObjects()) {
-                    var points = elem.getGeoObjects();
-                    points.forEach(element => {console.log(element);})
-                }
-//console.log('content', elem.content);
-                //console.log('cluster objects',elem.properties.get('geoObjects'));
+                pointId = vmap.geoObjects.get(0).clusters.getById(objectId).features[0].id;
+                $(selectContent).show();
+                currentMapZoomOnSelectorChange = vmap.getZoom();
+                $(selectType).val(pointId).change();
             }
         }
     }
+    function clickClusterEx1(e) { clickClusterEx(e, 1); }
+    function clickClusterEx2(e) { clickClusterEx(e, 2); }
 
     // запрет на открытие балунов
     $(window).bind('resize', function() {
@@ -690,8 +691,8 @@ console.log(objectsss);
 
             couponObjectManager.objects.events.add('click', clickPointEx1);
             placeObjectManager.objects.events.add('click', clickPointEx2);
-            couponObjectManager.clusters.events.add('click', clickClusterEx);
-            placeObjectManager.clusters.events.add('click', clickClusterEx);
+            couponObjectManager.clusters.events.add('click', clickClusterEx1);
+            placeObjectManager.clusters.events.add('click', clickClusterEx2);
         } else {
             placeObjectManager.options.set('geoObjectOpenBalloonOnClick', true);
             couponObjectManager.options.set('geoObjectOpenBalloonOnClick', true);
@@ -700,8 +701,8 @@ console.log(objectsss);
 
             couponObjectManager.objects.events.remove('click', clickPointEx1);
             placeObjectManager.objects.events.remove('click', clickPointEx2);
-            couponObjectManager.clusters.events.remove('click', clickClusterEx);
-            placeObjectManager.clusters.events.remove('click', clickClusterEx);
+            couponObjectManager.clusters.events.remove('click', clickClusterEx1);
+            placeObjectManager.clusters.events.remove('click', clickClusterEx2);
         }
     });
     $(window).trigger('resize');
