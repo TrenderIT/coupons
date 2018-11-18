@@ -335,7 +335,7 @@ ymaps.ready(function () {
                 ${addressContent}
               </div>`;
 
-            item.clust = "test";
+//            item.clust = "test";
             item.properties.clusterCaption = `<span class='main-content__address-item'>${item.properties.clusterCaption}</span>`;
         });
 
@@ -402,7 +402,7 @@ ymaps.ready(function () {
                   </select>
                 </div>
 
-                <h2 class='main-content__address-title'>${dataFeatures.title}</h2>
+                <a href='${dataFeatures.object_url}'><h2 class='main-content__address-title'>${dataFeatures.title}</h2></a>
                 <div class="main-content__sale-info">
                   <span class='main-content__price'>от <span>${dataFeatures.price}</span> руб.</span>
                   <span class='main-content__sale'>до ${dataFeatures.sale}%</span>
@@ -426,11 +426,11 @@ ymaps.ready(function () {
                 if ( item.id === objectId ) {
 
                     // Заполняем блок селекта
-                    $("#selectBlock .main-content__sale span").html(item.properties.data.sale);
-                    $("#selectBlock .main-content__price span").html(item.properties.data.price);
-                    $("#selectBlock h2.main-content__address-title").html(item.properties.data.title);
-                    $("#selectBlock a.main-content__address-btn").attr('href',item.properties.data.object_url);
-                    $("#selectBlock a.main-content__address-title").html(item.properties.data.category);
+                    $("#couponSelectBlock .main-content__sale span").html(item.properties.data.sale);
+                    $("#couponSelectBlock .main-content__price span").html(item.properties.data.price);
+                    $("#couponSelectBlock h2.main-content__address-title").html(item.properties.data.title);
+                    $("#couponSelectBlock a.main-content__address-btn").attr('href',item.properties.data.object_url);
+                    $("#couponSelectBlock a.main-content__address-title").html(item.properties.data.category);
 
                     if (item.properties.data.time) {
                         timeContent = `
@@ -442,7 +442,7 @@ ymaps.ready(function () {
                         timeContent = '';
                     }
 
-                    $("#selectBlock .js-time").html(timeContent);
+                    $("#couponSelectBlock .js-time").html(timeContent);
 
                     if (item.properties.data.phone) {
                         phoneContent = `
@@ -454,7 +454,7 @@ ymaps.ready(function () {
                         phoneContent = '';
                     }
 
-                    $("#selectBlock .js-phone").html(phoneContent);
+                    $("#couponSelectBlock .js-phone").html(phoneContent);
 
                     if (item.properties.data.address) {
                         addressContent = `
@@ -466,7 +466,7 @@ ymaps.ready(function () {
                         addressContent = '';
                     }
 
-                    $("#selectBlock .js-address").html(addressContent);
+                    $("#couponSelectBlock .js-address").html(addressContent);
 
                     // центруем карту
                     couponMap.setCenter(item.geometry.coordinates, 12, {
@@ -541,7 +541,7 @@ ymaps.ready(function () {
                   </select>
                 </div>
 
-                <h2 class='main-content__address-title'>${dataFeatures.title}</h2>
+                <a href='${dataFeatures.object_url}'><h2 class='main-content__address-title'>${dataFeatures.title}</h2></a>
 
                 <a class='btn main-content__address-btn' href='${dataFeatures.object_url}'>Подробнее о месте</a>
                 ${timeContent}
@@ -657,10 +657,13 @@ ymaps.ready(function () {
         if (e.get('type') == 'click') {
             if (couponMap.getZoom() >= Math.max.apply(null,couponMap.zoomRange.getCurrent())) {
                 var objectId = e.get('objectId');
-                console.log(objectId);
+console.log(objectId);
+console.log(couponMap);
+console.log(placeMap);
 
                 var elem = e.get('target');
-//console.log(typeof elem.getGeoObjects);
+                objectsss = couponMap.geoObjects.get(objectId);
+console.log(objectsss);
 //console.log(couponMap.objects.getGeoObjects(objectId));
 
                 if (elem.getGeoObjects()) {
@@ -698,4 +701,11 @@ ymaps.ready(function () {
         }
     });
     $(window).trigger('resize');
+
+    $(document).on('keydown', function(e){
+        if (e.key == 'Escape') {
+            couponMap.balloon.close();
+            placeMap.balloon.close();
+        }
+    });
 });
