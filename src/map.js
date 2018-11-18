@@ -352,6 +352,8 @@ ymaps.ready(function () {
             phoneContent,
             addressContent = '';
 
+        if (data.features.length <= 1) show_select_block = undefined;
+
         data.features.forEach(item => {
             options += `<option value="${item.id}">${item.properties.clusterCaption}</option>`
         });
@@ -489,6 +491,8 @@ ymaps.ready(function () {
         let timeContent,
             phoneContent,
             addressContent = '';
+
+        if (data.features.length <= 1) show_select_block = undefined;
 
         data.features.forEach(item => {
             options += `<option value="${item.id}">${item.properties.clusterCaption}</option>`
