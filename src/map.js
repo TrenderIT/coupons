@@ -406,17 +406,22 @@ ymaps.ready(function () {
                   </select>
                 </div>
 
-                <a href='${dataFeatures.object_url}'><h2 class='main-content__address-title'>${dataFeatures.title}</h2></a>
-                <div class="main-content__sale-info">
-                  <span class='main-content__price'>от <span>${dataFeatures.price}</span> руб.</span>
-                  <span class='main-content__sale'>до ${dataFeatures.sale}%</span>
-                </div>
+                <div class="js-single-block">
+                    <a href='${dataFeatures.object_url}'><h2 class='main-content__address-title'>${dataFeatures.title}</h2></a>
+                    <div class="main-content__sale-info">
+                      <span class='main-content__price'>от <span>${dataFeatures.price}</span> руб.</span>
+                      <span class='main-content__sale'>до ${dataFeatures.sale}%</span>
+                    </div>
 
-                <a class='btn main-content__address-btn' href='${dataFeatures.object_url}'>Подробнее о купоне</a>
-                <a href='#' class='main-content__address-title'>${dataFeatures.category}</a>
-                <div class='js-time'>${timeContent}</div>
-                <div class='js-phone'>${phoneContent}</div>
-                <div class='js-address'>${addressContent}</div>
+                    <a class='btn main-content__address-btn' href='${dataFeatures.object_url}'>Подробнее о купоне</a>
+                    <a href='#' class='main-content__address-title'>${dataFeatures.category}</a>
+                    <div class='js-time'>${timeContent}</div>
+                    <div class='js-phone'>${phoneContent}</div>
+                    <div class='js-address'>${addressContent}</div>
+                </div>
+                <div class="js-multi-block">
+
+                </div>
             </div>`;
 
         $(selectBlockCouponContent).appendTo(selectBlock);
@@ -480,6 +485,8 @@ ymaps.ready(function () {
                 }
 
             });
+            $('.js-single-block').css('display', 'block');
+            $('.js-multi-block').css('display', 'none');
         });
     }
 
@@ -548,12 +555,17 @@ ymaps.ready(function () {
                   </select>
                 </div>
 
-                <a href='${dataFeatures.object_url}'><h2 class='main-content__address-title'>${dataFeatures.title}</h2></a>
+                <div class="js-single-block">
 
-                <a class='btn main-content__address-btn' href='${dataFeatures.object_url}'>Подробнее о месте</a>
-                ${timeContent}
-                ${phoneContent}
-                ${addressContent}
+                    <a href='${dataFeatures.object_url}'><h2 class='main-content__address-title'>${dataFeatures.title}</h2></a>
+
+                    <a class='btn main-content__address-btn' href='${dataFeatures.object_url}'>Подробнее о месте</a>
+                    ${timeContent}
+                    ${phoneContent}
+                    ${addressContent}
+                </div>
+                <div class="js-multi-block">
+                </div>
             </div>`;
 
         $(selectBlockPlaceContent).appendTo(selectBlock);
@@ -577,8 +589,9 @@ ymaps.ready(function () {
                     });
                     currentMapZoomOnSelectorChange = defaultMapZoomOnSelectorChange;
                 }
-
             });
+            $('.js-single-block').css('display', 'block');
+            $('.js-multi-block').css('display', 'none');
         });
     }
 
@@ -606,6 +619,7 @@ ymaps.ready(function () {
           // url: "js/place.json"
       }).done(function(data) {
           var placeGroups = coverPlaceData(data);
+          console.log(placeGroups);
           placeObjectManager.add(placeGroups);
           createMenuPlace(placeGroups);
           selectBlockPlace(data);
@@ -655,26 +669,153 @@ ymaps.ready(function () {
     function clickPointEx2 (e) { clickPointEx(e, 2); }
     function clickClusterEx(e, maptype) {
         if (e.get('type') == 'click') {
+            var objectId = e.get('objectId');
             switch (maptype) {
                 case 1:
                     vmap = couponMap;
                     selectContent = '.js-coupon-select-content';
                     selectType = '.js-coupon-select_sel';
+                    mContent = '#couponSelectBlock .js-multi-block';
+
+                    content = '';
+
+                    console.log();
+
+                    objs = vmap.geoObjects.get(0).clusters.getById(objectId).features;
+
+                    objs.forEach(function(item, i, arr) {
+                        ldata = item.properties.data;
+                        // time
+                        if (ldata.time) {
+                            timeContent = `
+                              <div class='main-content__address-meta'>
+                                <svg class='main-content__address-meta-icon' width='14' height='14'><use xlink:href='/img/sprite-svg.svg#coupon__address-clock-icon'></use></svg>
+                                <span class='main-content__address-meta-desc'>${ldata.time}</span>
+                              </div>`
+                        } else {
+                            timeContent = '';
+                        }
+
+                        // phone
+                        if (ldata.phone) {
+                            phoneContent = `
+                                <div class='main-content__address-meta'>
+                                    <svg class='main-content__address-meta-icon' width='14' height='14'><use xlink:href='/img/sprite-svg.svg#coupon__address-phone-icon'></use></svg>
+                                    <span class='main-content__address-meta-desc'>${ldata.phone}</span>
+                                </div>`;
+                        } else {
+                            phoneContent = '';
+                        }
+
+                        // address
+                        if (ldata.address) {
+                            addressContent = `
+                            <div class='main-content__address-meta'>
+                                <svg class='main-content__address-meta-icon' width='13' height='18'><use xlink:href='/img/sprite-svg.svg#coupon__address-map-icon'></use></svg>
+                                <span class='main-content__address-meta-desc'>${ldata.address}</span>
+                            </div>`;
+                        } else {
+                            addressContent = '';
+                        }
+
+                        if (content.length > 10) {
+                            hr = '<hr style="margin: 40px 0;">';
+                        } else {
+                            hr = '';
+                        }
+
+                        content += `
+                            ${hr}
+                            <a href='${ldata.object_url}'><h2 class='main-content__address-title'>${ldata.title}</h2></a>
+                            <div class="main-content__sale-info">
+                                <span class='main-content__price'>от <span>${ldata.price}</span> руб.</span>
+                                <span class='main-content__sale'>до ${ldata.sale}%</span>
+                            </div>
+
+                            <a class='btn main-content__address-btn' href='${ldata.object_url}'>Подробнее о купоне</a>
+                            <a href='#' class='main-content__address-title'>${ldata.category}</a>
+                            <div class='js-time'>${timeContent}</div>
+                            <div class='js-phone'>${phoneContent}</div>
+                            <div class='js-address'>${addressContent}</div>
+                        `;
+                    });
                     break;
                 case 2:
                     vmap = placeMap;
                     selectContent = '.js-place-select-content';
                     selectType = '.js-place-select';
+
+                    mContent = '#placeSelectBlock .js-multi-block';
+
+                    content = '';
+
+                    objs = vmap.geoObjects.get(0).clusters.getById(objectId).features;
+
+                    objs.forEach(function(item, i, arr) {
+                        console.log(i);
+                        ldata = item.properties.data;
+
+                        // time
+                        if ( ldata.time ) {
+                            timeContent = `
+                                <div class='main-content__address-meta'>
+                                  <svg class='main-content__address-meta-icon' width='14' height='14'><use xlink:href='/img/sprite-svg.svg#coupon__address-clock-icon'></use></svg>
+                                  <span class='main-content__address-meta-desc js-time'>${ldata.time}</span>
+                                </div>`;
+                        } else {
+                            timeContent = '';
+                        }
+
+                        // phone
+                        if ( ldata.phone ) {
+                            phoneContent = `
+                                <div class='main-content__address-meta'>
+                                  <svg class='main-content__address-meta-icon' width='14' height='14'><use xlink:href='/img/sprite-svg.svg#coupon__address-phone-icon'></use></svg>
+                                  <span class='main-content__address-meta-desc js-phone'>${ldata.phone}</span>
+                                </div>`;
+                        } else {
+                            phoneContent = '';
+                        }
+
+                        // address
+                        if ( ldata.address ) {
+                            addressContent = `
+                                <div class='main-content__address-meta'>
+                                  <svg class='main-content__address-meta-icon' width='13' height='18'><use xlink:href='/img/sprite-svg.svg#coupon__address-map-icon'></use></svg>
+                                  <span class='main-content__address-meta-desc js-address'>${ldata.address}</span>
+                                </div>`;
+                        } else {
+                            addressContent = '';
+                        }
+
+                        if (content.length > 10) {
+                            hr = '<hr style="margin: 40px 0;">';
+                        } else {
+                            hr = '';
+                        }
+
+                        content += `
+                            ${hr}
+                            <a href='${ldata.object_url}'><h2 class='main-content__address-title'>${ldata.title}</h2></a>
+                            <a class='btn main-content__address-btn' href='${ldata.object_url}'>Подробнее о месте</a>
+                            ${timeContent}
+                            ${phoneContent}
+                            ${addressContent}
+                        `;
+                    });
                     break;
                 default:
                     exit;
             }
             if (vmap.getZoom() >= Math.max.apply(null,vmap.zoomRange.getCurrent())) {
-                var objectId = e.get('objectId');
                 pointId = vmap.geoObjects.get(0).clusters.getById(objectId).features[0].id;
                 $(selectContent).show();
                 currentMapZoomOnSelectorChange = vmap.getZoom();
                 $(selectType).val(pointId).change();
+                console.log(vmap.geoObjects.get(0).clusters.getById(objectId).features);
+                $(mContent).html(content);
+                $('.js-single-block').css('display', 'none');
+                $('.js-multi-block').css('display', 'block');
             }
         }
     }
